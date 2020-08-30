@@ -1,15 +1,18 @@
 public class Task {
     protected String description;
     protected boolean isDone;
+    protected String letterRepresentingTask;
 
     public Task(String description) {
         this.description = description;
         this.isDone = false;
+        this.letterRepresentingTask = "[T]";
     }
 
     public String getTaskDescription() {
-        return this.description;
+        return this.letterRepresentingTask + "[" + this.getStatusIcon() +"] " + this.description;
     }
+
 
     public String getStatusIcon() {
         return (isDone ? "\u2713" : "\u2718"); //return tick or X symbols
@@ -23,4 +26,7 @@ public class Task {
         this.isDone = true;
     }
 
+    public void setDate(String Date){
+
+    }
 }
