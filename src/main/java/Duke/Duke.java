@@ -1,3 +1,5 @@
+package Duke;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -5,42 +7,56 @@ import java.util.Scanner;
 public class Duke {
     public static void main(String[] args) {
         String inputStatement;
-        int endFlag = 0;
+        boolean hasEnded = false;
         String separatingLine = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-        Task[] listOfItems = new Task[100];
+        final int MAX_TASKS_IN_ARRAY = 100;
+        Task[] listOfItems = new Task[MAX_TASKS_IN_ARRAY];
         int listWordCount = 0;
 
         printWelcomeText(separatingLine);
         printBetweenLines(separatingLine, "Greetings, care for a cup of coffee?");
 
         //loop begins:
-        while (endFlag == 0) {
+        while (!hasEnded) {
             Scanner in = new Scanner(System.in);
             inputStatement = in.nextLine();
             if (inputStatement.equalsIgnoreCase("bye")) {
                 //signals end of programme
-                endFlag = 1;
-            }
-            else if (inputStatement.equalsIgnoreCase("list") ){
+                hasEnded = true;
+            } else if (inputStatement.equalsIgnoreCase("list") ){
                 System.out.println(separatingLine);
-                //makes sure list is not empty
-                if (checkListForItems(separatingLine, listOfItems[0] == null)) continue;
                 //print out list of items
-                System.out.println("Here's what you have:");
-                printArrangedList(listOfItems);
+                try {
+                    printArrangedList(listOfItems);
+                } catch (IllegalCommandsException e){
+                    System.out.println("Your list is empty, no lollygagging");
+                }
                 System.out.println(separatingLine);
-            }
-            else if(inputStatement.startsWith("done")){
+            } else if(inputStatement.startsWith("done")){
                 System.out.println(separatingLine);
-                markAsDone(inputStatement, separatingLine, listOfItems);
-            }
-            else {
+                try {
+                    markAsDone(inputStatement, listOfItems);
+                } catch (IllegalCommandsException e){
+                    System.out.println("Calm done mate, you finished that already.");
+                }catch (NumberFormatException e){
+                    System.out.println("Tip of the day: End your done command with a number next time");
+                }catch (ArrayIndexOutOfBoundsException | NullPointerException e){
+                    System.out.println("You can't do something that doesn't exist, or can you?");
+                }
+                System.out.println(separatingLine);
+            } else if(inputStatement.startsWith("todo")|inputStatement.startsWith("event")
+                    |inputStatement.startsWith("deadline")) {
                 //proceeds to add task if task is valid
-                listWordCount = classifyAndAddTask(inputStatement, separatingLine, listOfItems, listWordCount);
+                try {
+                    listWordCount = classifyAndAddTask(inputStatement, separatingLine, listOfItems, listWordCount);
+                }catch (StringIndexOutOfBoundsException | IllegalCommandsException e){
+                    printBetweenLines(separatingLine, "That's not a valid task!");
+                }
+            } else{
+                printBetweenLines(separatingLine, "That's not a valid command!");
             }
-        }
-        //loop ends
 
+        }
         //ending messages
         printBetweenLines(separatingLine, "We shall meet again...");
     }
@@ -59,7 +75,7 @@ public class Duke {
     }
 
     private static int classifyAndAddTask(String inputStatement, String separatingLine
-            ,Task[] listOfItems, int listWordCount) {
+            , Task[] listOfItems, int listWordCount) throws IllegalCommandsException {
         //determines what type of task is inputted, before add it to listOfItems and then incrementing listWordCount
         int indexOfSlash = inputStatement.indexOf("/");
         String numberOfTasks = "\nNow you have " + (listWordCount+1) + " tasks in the list.";
@@ -68,35 +84,29 @@ public class Duke {
             printBetweenLines(separatingLine, "More work ay? Here's what you need to do: \n"
                     + listOfItems[listWordCount].getTaskDescription() + numberOfTasks);
             listWordCount++;
-        }
-       else  if(inputStatement.startsWith("deadline")){
-           if(!inputStatement.contains("/by")){
-               printBetweenLines(separatingLine, "That's not a valid deadline");
-           }
-           else {
-               listOfItems[listWordCount] = new Deadline(getDescriptionFromInput(inputStatement, 8)
-                       , getTimeFromInput(inputStatement, indexOfSlash + 3));
+        } else  if(inputStatement.startsWith("deadline")){
+            if(!inputStatement.contains("/by")){
+                throw new IllegalCommandsException();
+            }
+            listOfItems[listWordCount] = new Deadline(getDescriptionFromInput(inputStatement, 8)
+                    , getTimeFromInput(inputStatement, indexOfSlash + 3));
 
-               printBetweenLines(separatingLine, "More work ay? Here's what you need to do: \n"
-                       + listOfItems[listWordCount].getTaskDescription() + numberOfTasks);
-               listWordCount++;
-           }
+            printBetweenLines(separatingLine, "More work ay? Here's what you need to do: \n"
+                    + listOfItems[listWordCount].getTaskDescription() + numberOfTasks);
+            listWordCount++;
+
         }
         else if(inputStatement.startsWith("event")){
             if(!inputStatement.contains("/at")){
-                printBetweenLines(separatingLine, "That's not a valid event");
+                throw new IllegalCommandsException();
             }
-            else {
-                listOfItems[listWordCount] = new Event(getDescriptionFromInput(inputStatement, 5)
-                        , getTimeFromInput(inputStatement, indexOfSlash + 3));
+            listOfItems[listWordCount] = new Event(getDescriptionFromInput(inputStatement, 5)
+                    , getTimeFromInput(inputStatement, indexOfSlash + 3));
 
-                printBetweenLines(separatingLine, "More work ay? Here's what you need to do: \n"
-                        + listOfItems[listWordCount].getTaskDescription() + numberOfTasks);
-                listWordCount++;
-            }
-        }
-        else{
-            printBetweenLines(separatingLine, "That's not a valid command.");
+            printBetweenLines(separatingLine, "More work ay? Here's what you need to do: \n"
+                    + listOfItems[listWordCount].getTaskDescription() + numberOfTasks);
+            listWordCount++;
+
         }
         return listWordCount;
     }
@@ -111,41 +121,15 @@ public class Duke {
         return inputStatement.substring(i, inputStatement.indexOf("/")).trim();
     }
 
-    private static void markAsDone(String inputStatement, String separatingLine, Task[] listOfItems) {
-        //confirms that input after done is a number
-        if (!checkIfDoneIsValid(inputStatement.substring(4).trim())){
-            System.out.println("Tip of the day: End your done command with a number next time");
-            System.out.println(separatingLine);
-            return;
-        }
-        //confirms that input after done is valid
+    private static void markAsDone(String inputStatement, Task[] listOfItems) throws IllegalCommandsException {
         int indexOfItem = Integer.parseInt(inputStatement.substring(4).trim());
-        if ((indexOfItem>99) || ( listOfItems[indexOfItem-1]==null) ){
-            //checks if the completed item is valid.
-            System.out.println("You can't do something that doesn't exist, or can you?");
-            System.out.println(separatingLine);
-            return;
-        }
-        else if(listOfItems[indexOfItem - 1].getStatus()){
+        if(listOfItems[indexOfItem - 1].getStatus()){
             //checks if the completed item is already done.
-            System.out.println("Calm done mate, you finished that already.");
-            System.out.println(separatingLine);
-            return;
+            throw new IllegalCommandsException();
         }
         System.out.println("One more down, but at what cost...");
         listOfItems[indexOfItem-1].markAsDone();
         System.out.println(listOfItems[indexOfItem-1].getTaskDescription());
-        System.out.println(separatingLine);
-    }
-
-    private static boolean checkListForItems(String separatingLine, boolean b) {
-        if (b) {
-            //checks if the list has a first item
-            System.out.println("Your list is empty, no lollygagging");
-            System.out.println(separatingLine);
-            return true;
-        }
-        return false;
     }
 
     private static void printBetweenLines(String separatingLine, String s) {
@@ -154,8 +138,13 @@ public class Duke {
         System.out.println(separatingLine);
     }
 
-    private static void printArrangedList(Task[] list){
+    private static void printArrangedList(Task[] list) throws IllegalCommandsException {
+        //throws an error exception if list is empty
+        if (list[0] == null) {
+            throw new IllegalCommandsException();
+        }
         //a function that prints the array without returning any values
+        System.out.println("Here's what you have:");
         String[] newList = new String[list.length];
         int listIndex = 0;
         for(Task item: list ) {
@@ -169,18 +158,7 @@ public class Duke {
         }
     }
 
-    private static Boolean checkIfDoneIsValid(String stringAfterDone){
-        //checks what comes after done are valid numerics, or is not just empty space
-        char[] string = stringAfterDone.toCharArray();
-        if(string.length == 0){
-            return false;
-        }
-        for (char word : string) {
-            if (!Character.isDigit(word)){
-                return false;
-            }
-        }
-        return true;
-    }
+
+
 
 }
