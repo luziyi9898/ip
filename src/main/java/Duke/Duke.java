@@ -29,6 +29,7 @@ public class Duke {
                 try {
                     printArrangedList(listOfItems);
                 } catch (IllegalCommandsException e){
+                    //throws exception when list is empty.
                     System.out.println("Your list is empty, no lollygagging");
                 }
                 System.out.println(separatingLine);
@@ -37,22 +38,27 @@ public class Duke {
                 try {
                     markAsDone(inputStatement, listOfItems);
                 } catch (IllegalCommandsException e){
+                    //throws exception when doing task that is already done.
                     System.out.println("Calm done mate, you finished that already.");
                 }catch (NumberFormatException e){
+                    //throws exception when done command is not followed by a number.
                     System.out.println("Tip of the day: End your done command with a number next time");
                 }catch (ArrayIndexOutOfBoundsException | NullPointerException e){
+                    //throws exception when done command is followed by an empty task or task outside of array.
                     System.out.println("You can't do something that doesn't exist, or can you?");
                 }
                 System.out.println(separatingLine);
             } else if(inputStatement.startsWith("todo")|inputStatement.startsWith("event")
                     |inputStatement.startsWith("deadline")) {
-                //proceeds to add task if task is valid
+                //proceeds to add task if task is valid.
                 try {
                     listWordCount = classifyAndAddTask(inputStatement, separatingLine, listOfItems, listWordCount);
                 }catch (StringIndexOutOfBoundsException | IllegalCommandsException e){
+                    //throws exception when adding invalid tasks.
                     printBetweenLines(separatingLine, "That's not a valid task!");
                 }
             } else{
+                //throws exception when inputting invalid commands.
                 printBetweenLines(separatingLine, "That's not a valid command!");
             }
 
@@ -86,6 +92,7 @@ public class Duke {
             listWordCount++;
         } else  if(inputStatement.startsWith("deadline")){
             if(!inputStatement.contains("/by")){
+                //throws exception when deadline commands are not followed with /by
                 throw new IllegalCommandsException();
             }
             listOfItems[listWordCount] = new Deadline(getDescriptionFromInput(inputStatement, 8)
@@ -98,6 +105,7 @@ public class Duke {
         }
         else if(inputStatement.startsWith("event")){
             if(!inputStatement.contains("/at")){
+                //throws exception when event commands are not followed with /at
                 throw new IllegalCommandsException();
             }
             listOfItems[listWordCount] = new Event(getDescriptionFromInput(inputStatement, 5)
