@@ -21,8 +21,6 @@ public class Duke {
         printBetweenLines(separatingLine, "Greetings, care for a cup of coffee?");
 
         try {
-            //loadSavedText("docs/duke.txt", listOfItems);
-            //listOfItems = loadSavedText("docs/duke.txt", listOfItems);
             loadSavedText(defaultPath, listOfItems);
             System.out.println("Previous entries uploaded.");
             System.out.println(separatingLine);
@@ -32,10 +30,7 @@ public class Duke {
            System.out.println("Save not detected, creating new save file.");
            System.out.println(separatingLine);
         }
-
-        //listWordCount = updateListWordCount(listWordCount, listOfItems);
         listWordCount = listOfItems.size();
-
 
         //loop begins:
         while (!hasEnded) {
@@ -230,29 +225,22 @@ public class Duke {
         int listIndex = 0;
         while (s.hasNext()) {
             String importedCommand = s.nextLine();
-            //System.out.println(s.nextLine());
+
             Integer currentStatusSymbol = importedCommand.codePointAt(4);
 
             if (importedCommand.startsWith("[T]")){
                 list.add(new Todo(importedCommand.substring(7).trim()));
             }else if (importedCommand.startsWith("[D]")){
                 list.add(new Deadline(importedCommand.substring(7,importedCommand.indexOf("(")-1),
-                        importedCommand.substring(importedCommand.indexOf(":")+1,importedCommand.indexOf(")"))));
+                        importedCommand.substring(importedCommand.indexOf("by:")+3,importedCommand.length()-1)));
             }else if (importedCommand.startsWith("[E]")){
                 list.add(new Event(importedCommand.substring(7,importedCommand.indexOf("(")-1),
-                        importedCommand.substring(importedCommand.indexOf(":")+1,importedCommand.indexOf(")"))));
+                        importedCommand.substring(importedCommand.indexOf("at:")+3,importedCommand.length()-1)));
             }
             if (currentStatusSymbol.equals(10003)){
                 list.get(listIndex).markAsDone();
             }
             listIndex+=1;
-
         }
-
     }
-
-
-
-
-
 }
