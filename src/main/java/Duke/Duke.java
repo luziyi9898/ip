@@ -2,15 +2,15 @@ package Duke;
 
 import java.util.Arrays;
 import java.util.Scanner;
-
+import java.util.ArrayList;
 
 public class Duke {
     public static void main(String[] args) {
         String inputStatement;
         boolean hasEnded = false;
         String separatingLine = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-        final int MAX_TASKS_IN_ARRAY = 100;
-        Task[] listOfItems = new Task[MAX_TASKS_IN_ARRAY];
+
+        ArrayList<Task> listOfItems = new ArrayList<>();
         int listWordCount = 0;
 
         printWelcomeText(separatingLine);
@@ -48,7 +48,17 @@ public class Duke {
                     System.out.println("You can't do something that doesn't exist, or can you?");
                 }
                 System.out.println(separatingLine);
-            } else if(inputStatement.startsWith("todo")|inputStatement.startsWith("event")
+            } else if(inputStatement.startsWith("delete")){
+                System.out.println(separatingLine);
+                try {
+                    deleteItem(inputStatement, listOfItems);
+                    listWordCount = listWordCount - 1;
+                    System.out.println("Now you have " + (listWordCount) + " tasks in the list.");
+                }catch(IndexOutOfBoundsException|NumberFormatException e){
+                    System.out.println("You can't delete that!");
+                }
+                System.out.println(separatingLine);
+            }else if(inputStatement.startsWith("todo")|inputStatement.startsWith("event")
                     |inputStatement.startsWith("deadline")) {
                 //proceeds to add task if task is valid.
                 try {
@@ -81,25 +91,25 @@ public class Duke {
     }
 
     private static int classifyAndAddTask(String inputStatement, String separatingLine
-            , Task[] listOfItems, int listWordCount) throws IllegalCommandsException {
+            , ArrayList<Task> listOfItems, int listWordCount) throws IllegalCommandsException {
         //determines what type of task is inputted, before add it to listOfItems and then incrementing listWordCount
         int indexOfSlash = inputStatement.indexOf("/");
         String numberOfTasks = "\nNow you have " + (listWordCount+1) + " tasks in the list.";
         if(inputStatement.startsWith("todo")){
-            listOfItems[listWordCount] = new Todo(inputStatement.substring(4).trim());
+            listOfItems.add(new Todo(inputStatement.substring(4).trim()));
             printBetweenLines(separatingLine, "More work ay? Here's what you need to do: \n"
-                    + listOfItems[listWordCount].getTaskDescription() + numberOfTasks);
+                    + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
             listWordCount++;
         } else  if(inputStatement.startsWith("deadline")){
             if(!inputStatement.contains("/by")){
                 //throws exception when deadline commands are not followed with /by
                 throw new IllegalCommandsException();
             }
-            listOfItems[listWordCount] = new Deadline(getDescriptionFromInput(inputStatement, 8)
-                    , getTimeFromInput(inputStatement, indexOfSlash + 3));
+            listOfItems.add(new Deadline(getDescriptionFromInput(inputStatement, 8),
+                    getTimeFromInput(inputStatement, indexOfSlash + 3)));
 
             printBetweenLines(separatingLine, "More work ay? Here's what you need to do: \n"
-                    + listOfItems[listWordCount].getTaskDescription() + numberOfTasks);
+                    + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
             listWordCount++;
 
         }
@@ -108,11 +118,11 @@ public class Duke {
                 //throws exception when event commands are not followed with /at
                 throw new IllegalCommandsException();
             }
-            listOfItems[listWordCount] = new Event(getDescriptionFromInput(inputStatement, 5)
-                    , getTimeFromInput(inputStatement, indexOfSlash + 3));
+            listOfItems.add(new Event(getDescriptionFromInput(inputStatement, 5)
+                    , getTimeFromInput(inputStatement, indexOfSlash + 3)));
 
             printBetweenLines(separatingLine, "More work ay? Here's what you need to do: \n"
-                    + listOfItems[listWordCount].getTaskDescription() + numberOfTasks);
+                    + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
             listWordCount++;
 
         }
@@ -129,15 +139,15 @@ public class Duke {
         return inputStatement.substring(i, inputStatement.indexOf("/")).trim();
     }
 
-    private static void markAsDone(String inputStatement, Task[] listOfItems) throws IllegalCommandsException {
+    private static void markAsDone(String inputStatement, ArrayList<Task> listOfItems) throws IllegalCommandsException {
         int indexOfItem = Integer.parseInt(inputStatement.substring(4).trim());
-        if(listOfItems[indexOfItem - 1].getStatus()){
+        if(listOfItems.get(indexOfItem - 1).getStatus()){
             //checks if the completed item is already done.
             throw new IllegalCommandsException();
         }
         System.out.println("One more down, but at what cost...");
-        listOfItems[indexOfItem-1].markAsDone();
-        System.out.println(listOfItems[indexOfItem-1].getTaskDescription());
+        listOfItems.get(indexOfItem - 1).markAsDone();
+        System.out.println(listOfItems.get(indexOfItem - 1).getTaskDescription());
     }
 
     private static void printBetweenLines(String separatingLine, String s) {
@@ -146,14 +156,14 @@ public class Duke {
         System.out.println(separatingLine);
     }
 
-    private static void printArrangedList(Task[] list) throws IllegalCommandsException {
+    private static void printArrangedList(ArrayList<Task> list) throws IllegalCommandsException {
         //throws an error exception if list is empty
-        if (list[0] == null) {
+        if (list.size() == 0) {
             throw new IllegalCommandsException();
         }
         //a function that prints the array without returning any values
         System.out.println("Here's what you have:");
-        String[] newList = new String[list.length];
+        String[] newList = new String[list.size()];
         int listIndex = 0;
         for(Task item: list ) {
             if (item != null) {
@@ -166,6 +176,13 @@ public class Duke {
         }
     }
 
+    private static void deleteItem(String inputStatement, ArrayList<Task> list){
+        int indexOfRemovedItem = Integer.parseInt(inputStatement.substring(6).trim());
+        System.out.println("Must be nice to have less things to do, right? Here's what you removed:\n"
+                + list.get(indexOfRemovedItem-1).getTaskDescription());
+        list.remove(indexOfRemovedItem-1);
+
+    }
 
 
 
