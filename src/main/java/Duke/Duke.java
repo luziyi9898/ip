@@ -1,20 +1,41 @@
 package Duke;
-
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
 
 
 public class Duke {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String inputStatement;
         boolean hasEnded = false;
         String separatingLine = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
         final int MAX_TASKS_IN_ARRAY = 100;
         Task[] listOfItems = new Task[MAX_TASKS_IN_ARRAY];
         int listWordCount = 0;
+        java.nio.file.Path path = java.nio.file.Paths.get("docs/","duke");
 
         printWelcomeText(separatingLine);
         printBetweenLines(separatingLine, "Greetings, care for a cup of coffee?");
+
+        try {
+            //loadSavedText("docs/duke.txt", listOfItems);
+            listOfItems = loadSavedText("docs/duke.txt", listOfItems);
+            System.out.println("Previous entries uploaded.");
+            System.out.println(separatingLine);
+        }catch (FileNotFoundException e){
+           File f =new File("docs/duke.txt");
+           f.createNewFile();
+           System.out.println("Save not detected, creating new save file.");
+           System.out.println(separatingLine);
+        }
+
+        listWordCount = updateListWordCount(listWordCount, listOfItems);
+
 
         //loop begins:
         while (!hasEnded) {
@@ -57,10 +78,18 @@ public class Duke {
                     //throws exception when adding invalid tasks.
                     printBetweenLines(separatingLine, "That's not a valid task!");
                 }
+
             } else{
                 //throws exception when inputting invalid commands.
                 printBetweenLines(separatingLine, "That's not a valid command!");
             }
+            //update the text document
+            try {
+                writeToFile("docs/duke.txt", listOfItems);
+            } catch (IOException e) {
+                System.out.println("Something went wrong: " + e.getMessage());
+            }
+
 
         }
         //ending messages
@@ -165,7 +194,53 @@ public class Duke {
             System.out.println(item);
         }
     }
+    private static void writeToFile(String filePath, Task[] list) throws IOException {
 
+        FileWriter fw = new FileWriter(filePath);
+        for(Task item: list ) {
+            if (item != null) {
+                fw.write(item.getTaskDescription()+ System.lineSeparator());
+            }
+        }
+        fw.close();
+    }
+
+    private static Task[] loadSavedText(String filePath, Task[] list) throws FileNotFoundException {
+        File f = new File(filePath); // create a File for the given file path
+        Scanner s = new Scanner(f); // create a Scanner using the File as the source
+        int listIndex = 0;
+        while (s.hasNext()) {
+            String importedCommand = s.nextLine();
+            //System.out.println(s.nextLine());
+            Integer currentStatusSymbol = importedCommand.codePointAt(4);
+
+            if (importedCommand.startsWith("[T]")){
+                list[listIndex] = new Todo(importedCommand.substring(7).trim());
+            }else if (importedCommand.startsWith("[D]")){
+                list[listIndex] = new Deadline(importedCommand.substring(7,importedCommand.indexOf("(")-1),
+                        importedCommand.substring(importedCommand.indexOf(":")+1,importedCommand.indexOf(")")));
+            }else if (importedCommand.startsWith("[E]")){
+                list[listIndex] = new Event(importedCommand.substring(7,importedCommand.indexOf("(")-1),
+                        importedCommand.substring(importedCommand.indexOf(":")+1,importedCommand.indexOf(")")));
+            }
+            if (currentStatusSymbol.equals(10003)){
+                list[listIndex].markAsDone();
+            }
+            listIndex+=1;
+
+        }
+        return list;
+
+    }
+
+    private static int updateListWordCount(int listWordCount, Task[] list){
+        for(Task item: list ) {
+            if (item != null) {
+                listWordCount++;
+            }
+        }
+        return listWordCount;
+    }
 
 
 

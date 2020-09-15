@@ -1,0 +1,4 @@
+[T][✘] aaa
+[T][✘] bbb
+[E][✓] ccc (at:sometime)
+[D][✓] ddd (by:sometime else)
