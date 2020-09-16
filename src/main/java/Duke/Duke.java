@@ -12,7 +12,7 @@ public class Duke {
         String inputStatement;
         boolean hasEnded = false;
         String separatingLine = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-        String defaultPath = "docs/duke.txt";
+        String defaultPath = "duke.txt";
         ArrayList<Task> listOfItems = new ArrayList<>();
         int listWordCount;
 
@@ -90,7 +90,7 @@ public class Duke {
             }
             //update the text document
             try {
-                writeToFile("docs/duke.txt", listOfItems);
+                writeToFile(defaultPath, listOfItems);
             } catch (IOException e) {
                 System.out.println("Something went wrong: " + e.getMessage());
             }

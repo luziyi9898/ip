@@ -1,5 +1,0 @@
-[T][✓] bbb
-[T][✘] ccc
-[D][✓] whatdeadline (by:sometime)
-[E][✘] what event (at:sometimeelse)
-[T][✘] eee
