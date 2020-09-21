@@ -1,2 +1,5 @@
-[T][✘] bbb
-[T][✘] aaa
+[T][✓] ccc
+[T][✘] eee
+[E][✓] event a (at:sometime)
+[T][✘] abc
+[T][✘] gaerno

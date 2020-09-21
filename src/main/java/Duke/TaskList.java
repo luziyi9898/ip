@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TaskList {
-    public static int classifyAndAddTask(String inputStatement
+
+    public static ArrayList<Task> listOfItems = new ArrayList<>();
+    public static int listWordCount;
+
+
+    public static int addTask(String inputStatement
             , ArrayList<Task> listOfItems, int listWordCount) throws IllegalCommandsException {
         //determines what type of task is inputted, before add it to listOfItems and then incrementing listWordCount
         int indexOfSlash = inputStatement.indexOf("/");

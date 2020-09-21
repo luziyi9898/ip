@@ -15,11 +15,19 @@ public class Ui {
         System.out.println("\u2022[done (index of task)] marks a task as done in your list.");
         System.out.println("\u2022[list] prints out your current list and status of tasks.");
         System.out.println("\u2022[bye] exits the programme.");
+        System.out.println(DIVIDER);
+        System.out.println("Greetings, care for a cup of coffee?");
+        System.out.println(DIVIDER);
     }
 
     public static void printBetweenLines(String s) {
         System.out.println(DIVIDER);
         System.out.println(s);
+        System.out.println(DIVIDER);
+    }
+    public static void printEndingText() {
+        System.out.println(DIVIDER);
+        System.out.println("We shall meet again...");
         System.out.println(DIVIDER);
     }
 }

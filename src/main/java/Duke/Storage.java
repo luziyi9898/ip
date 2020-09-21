@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
+
+    public static String defaultPath = "duke.txt";
+
     public static void writeToFile(String filePath, ArrayList<Task> list) throws IOException {
 
         FileWriter fw = new FileWriter(filePath);
@@ -48,6 +51,26 @@ public class Storage {
                 list.get(listIndex).markAsDone();
             }
             listIndex += 1;
+        }
+    }
+
+    public static void loadPreviousEntries() throws IOException {
+        try {
+            Storage.loadSavedText(Storage.defaultPath, TaskList.listOfItems);
+            System.out.println("Previous entries uploaded.");
+            System.out.println(Ui.DIVIDER);
+        }catch (FileNotFoundException e){
+            File f =new File(Storage.defaultPath);
+            f.createNewFile();
+            System.out.println("Save not detected, creating new save file.");
+            System.out.println(Ui.DIVIDER);
+        }
+    }
+    public static void updateSavedFile(String defaultPath, ArrayList<Task> listOfItems) {
+        try {
+            Storage.writeToFile(defaultPath, listOfItems);
+        } catch (IOException e) {
+            System.out.println("Something went wrong: " + e.getMessage());
         }
     }
 }
