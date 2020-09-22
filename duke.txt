@@ -1,5 +1,2 @@
-[T][✓] ccc
-[T][✘] eee
-[E][✓] event a (at:sometime)
-[T][✘] abc
-[T][✘] gaerno
+[D][✓] acb (by:Feb 3 2020)
+[E][✘] thisisanevent (at:Nov 5 2020)

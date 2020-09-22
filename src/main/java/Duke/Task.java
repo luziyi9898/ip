@@ -1,5 +1,7 @@
 package Duke;
 
+import java.time.LocalDate;
+
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -28,7 +30,7 @@ public class Task {
         this.isDone = true;
     }
 
-    public void setDate(String Date){
+    public void setDate(LocalDate Date){
 
     }
 }

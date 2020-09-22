@@ -1,19 +1,21 @@
 package Duke;
 
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.time.LocalDate;
 
 public class TaskList {
 
     public static ArrayList<Task> listOfItems = new ArrayList<>();
-    public static int listWordCount;
-
 
     public static int addTask(String inputStatement
             , ArrayList<Task> listOfItems, int listWordCount) throws IllegalCommandsException {
         //determines what type of task is inputted, before add it to listOfItems and then incrementing listWordCount
         int indexOfSlash = inputStatement.indexOf("/");
         String numberOfTasks = "\nNow you have " + (listWordCount + 1) + " tasks in the list.";
+
+
         if (inputStatement.startsWith("todo")) {
             listOfItems.add(new Todo(inputStatement.substring(4).trim()));
             Ui.printBetweenLines("More work ay? Here's what you need to do: \n"
@@ -24,32 +26,37 @@ public class TaskList {
                 //throws exception when deadline commands are not followed with /by
                 throw new IllegalCommandsException();
             }
-            listOfItems.add(new Deadline(getDescriptionFromInput(inputStatement, 8),
-                    getTimeFromInput(inputStatement, indexOfSlash + 3)));
-
-            Ui.printBetweenLines("More work ay? Here's what you need to do: \n"
-                    + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
-            listWordCount++;
+            try {
+                listOfItems.add(new Deadline(getDescriptionFromInput(inputStatement, 8),
+                        getTimeFromInput(inputStatement.substring(indexOfSlash + 3))));
+                Ui.printBetweenLines("More work ay? Here's what you need to do: \n"
+                        + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
+                listWordCount++;
+            }catch(DateTimeParseException e){
+                Ui.printBetweenLines("Add time as yyyy-mm-dd");
+            }
 
         } else if (inputStatement.startsWith("event")) {
             if (!inputStatement.contains("/at")) {
                 //throws exception when event commands are not followed with /at
                 throw new IllegalCommandsException();
             }
-            listOfItems.add(new Event(getDescriptionFromInput(inputStatement, 5)
-                    , getTimeFromInput(inputStatement, indexOfSlash + 3)));
-
-            Ui.printBetweenLines("More work ay? Here's what you need to do: \n"
-                    + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
-            listWordCount++;
-
+            try {
+                listOfItems.add(new Event(getDescriptionFromInput(inputStatement, 5),
+                        getTimeFromInput(inputStatement.substring(indexOfSlash + 3))));
+                Ui.printBetweenLines("More work ay? Here's what you need to do: \n"
+                        + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
+                listWordCount++;
+            }catch(DateTimeParseException e){
+                Ui.printBetweenLines("Add time as yyyy-mm-dd");
+            }
         }
         return listWordCount;
     }
 
-    static String getTimeFromInput(String inputStatement, int i) {
-        //i represents default letters in command i.e. (/at )
-        return inputStatement.substring(i).trim();
+    static LocalDate getTimeFromInput(String inputStatement) {
+
+        return LocalDate.parse(inputStatement.trim().replace('/','-'));
     }
 
     static String getDescriptionFromInput(String inputStatement, int i) {

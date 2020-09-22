@@ -4,8 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
+
+
 
 public class Storage {
 
@@ -41,11 +47,23 @@ public class Storage {
             if (importedCommand.startsWith("[T]")) {
                 list.add(new Todo(importedCommand.substring(7).trim()));
             } else if (importedCommand.startsWith("[D]")) {
-                list.add(new Deadline(importedCommand.substring(7, importedCommand.indexOf("(") - 1),
-                        importedCommand.substring(importedCommand.indexOf("by:") + 3, importedCommand.length() - 1)));
+                try {
+                    LocalDate taskDateBy = LocalDate.parse(importedCommand.substring(importedCommand.indexOf("by:") + 3
+                            , importedCommand.length() - 1)
+                            , DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH));
+                    list.add(new Deadline(importedCommand.substring(7, importedCommand.indexOf("(") - 1), taskDateBy));
+                }catch(DateTimeParseException e){
+                    Ui.printBetweenLines("Add time as yyyy/mm/dd");
+                }
             } else if (importedCommand.startsWith("[E]")) {
-                list.add(new Event(importedCommand.substring(7, importedCommand.indexOf("(") - 1),
-                        importedCommand.substring(importedCommand.indexOf("at:") + 3, importedCommand.length() - 1)));
+                try {
+                    LocalDate taskDateAt = LocalDate.parse(importedCommand.substring(importedCommand.indexOf("at:") + 3
+                            , importedCommand.length() - 1)
+                            , DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH));
+                    list.add(new Event(importedCommand.substring(7, importedCommand.indexOf("(") - 1), taskDateAt));
+                }catch(DateTimeParseException e){
+                    Ui.printBetweenLines("Add time as yyyy/mm/dd");
+                }
             }
             if (currentStatusSymbol.equals(10003)) {
                 list.get(listIndex).markAsDone();
