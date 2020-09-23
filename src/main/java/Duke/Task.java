@@ -10,7 +10,7 @@ public class Task {
     public Task(String description) {
         this.description = description;
         this.isDone = false;
-        this.letterRepresentingTask = "[T]";
+        this.letterRepresentingTask = Ui.TODO_ICON;
     }
 
     public String getTaskDescription() {

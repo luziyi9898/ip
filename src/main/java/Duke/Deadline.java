@@ -9,7 +9,7 @@ public class Deadline extends Todo{
     public Deadline(String description, LocalDate dateBy) {
         super(description);
         this.dateBy = dateBy;
-        this.letterRepresentingTask = "[D]";
+        this.letterRepresentingTask = Ui.DEADLINE_ICON;
     }
 
     public String getDateBy() {

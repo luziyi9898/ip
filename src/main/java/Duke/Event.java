@@ -9,7 +9,7 @@ public class Event extends Todo{
     public Event(String description, LocalDate dateAt) {
         super(description);
         this.dateAt = dateAt;
-        this.letterRepresentingTask = "[E]";
+        this.letterRepresentingTask = Ui.EVENT_ICON;
     }
 
     public String getDateAt() {

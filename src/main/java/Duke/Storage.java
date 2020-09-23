@@ -30,7 +30,7 @@ public class Storage {
 
     public static void deleteItem(String inputStatement, ArrayList<Task> list) {
         int indexOfRemovedItem = Integer.parseInt(inputStatement.substring(6).trim());
-        System.out.println("Must be nice to have less things to do, right? Here's what you removed:\n"
+        System.out.println(Ui.COMMENT_DELETE_ITEM
                 + list.get(indexOfRemovedItem - 1).getTaskDescription());
         list.remove(indexOfRemovedItem - 1);
     }
@@ -44,25 +44,25 @@ public class Storage {
 
             Integer currentStatusSymbol = importedCommand.codePointAt(4);
 
-            if (importedCommand.startsWith("[T]")) {
+            if (importedCommand.startsWith(Ui.TODO_ICON)) {
                 list.add(new Todo(importedCommand.substring(7).trim()));
-            } else if (importedCommand.startsWith("[D]")) {
+            } else if (importedCommand.startsWith(Ui.DEADLINE_ICON)) {
                 try {
                     LocalDate taskDateBy = LocalDate.parse(importedCommand.substring(importedCommand.indexOf("by:") + 3
                             , importedCommand.length() - 1)
                             , DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH));
                     list.add(new Deadline(importedCommand.substring(7, importedCommand.indexOf("(") - 1), taskDateBy));
                 }catch(DateTimeParseException e){
-                    Ui.printBetweenLines("Add time as yyyy/mm/dd");
+                    Ui.printBetweenLines(Ui.MESSAGE_INVALID_TIME);
                 }
-            } else if (importedCommand.startsWith("[E]")) {
+            } else if (importedCommand.startsWith(Ui.EVENT_ICON)) {
                 try {
                     LocalDate taskDateAt = LocalDate.parse(importedCommand.substring(importedCommand.indexOf("at:") + 3
                             , importedCommand.length() - 1)
                             , DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH));
                     list.add(new Event(importedCommand.substring(7, importedCommand.indexOf("(") - 1), taskDateAt));
                 }catch(DateTimeParseException e){
-                    Ui.printBetweenLines("Add time as yyyy/mm/dd");
+                    Ui.printBetweenLines(Ui.MESSAGE_INVALID_TIME);
                 }
             }
             if (currentStatusSymbol.equals(10003)) {
@@ -75,12 +75,12 @@ public class Storage {
     public static void loadPreviousEntries() throws IOException {
         try {
             Storage.loadSavedText(Storage.defaultPath, TaskList.listOfItems);
-            System.out.println("Previous entries uploaded.");
+            System.out.println(Ui.COMMENT_LOAD_ENTRIES);
             System.out.println(Ui.DIVIDER);
         }catch (FileNotFoundException e){
             File f =new File(Storage.defaultPath);
             f.createNewFile();
-            System.out.println("Save not detected, creating new save file.");
+            System.out.println(Ui.COMMENT_CREATE_SAVE);
             System.out.println(Ui.DIVIDER);
         }
     }
@@ -88,7 +88,7 @@ public class Storage {
         try {
             Storage.writeToFile(defaultPath, listOfItems);
         } catch (IOException e) {
-            System.out.println("Something went wrong: " + e.getMessage());
+            System.out.println(Ui.MESSAGE_UNKNOWN_ERROR + e.getMessage());
         }
     }
 }

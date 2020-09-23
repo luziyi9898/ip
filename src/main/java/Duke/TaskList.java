@@ -15,42 +15,57 @@ public class TaskList {
         int indexOfSlash = inputStatement.indexOf("/");
         String numberOfTasks = "\nNow you have " + (listWordCount + 1) + " tasks in the list.";
 
+        if (inputStatement.startsWith(Ui.COMMAND_TODO)) {
+            listWordCount = addTodo(inputStatement, listOfItems, listWordCount, numberOfTasks);
+        } else if (inputStatement.startsWith(Ui.COMMAND_DEADLINE)) {
+            listWordCount = addDeadline(inputStatement, listOfItems, listWordCount, indexOfSlash, numberOfTasks);
+        } else if (inputStatement.startsWith(Ui.COMMAND_EVENT)) {
+            listWordCount = addEvent(inputStatement, listOfItems, listWordCount, indexOfSlash, numberOfTasks);
+        }
+        return listWordCount;
+    }
 
-        if (inputStatement.startsWith("todo")) {
-            listOfItems.add(new Todo(inputStatement.substring(4).trim()));
-            Ui.printBetweenLines("More work ay? Here's what you need to do: \n"
+    private static int addEvent(String inputStatement, ArrayList<Task> listOfItems, int listWordCount
+            , int indexOfSlash, String numberOfTasks) throws IllegalCommandsException {
+        if (!inputStatement.contains("/at")) {
+            //throws exception when event commands are not followed with /at
+            throw new IllegalCommandsException();
+        }
+        try {
+            listOfItems.add(new Event(getDescriptionFromInput(inputStatement, 5),
+                    getTimeFromInput(inputStatement.substring(indexOfSlash + 3))));
+            Ui.printBetweenLines(Ui.COMMENT_ADD_TASK
                     + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
             listWordCount++;
-        } else if (inputStatement.startsWith("deadline")) {
-            if (!inputStatement.contains("/by")) {
-                //throws exception when deadline commands are not followed with /by
-                throw new IllegalCommandsException();
-            }
-            try {
-                listOfItems.add(new Deadline(getDescriptionFromInput(inputStatement, 8),
-                        getTimeFromInput(inputStatement.substring(indexOfSlash + 3))));
-                Ui.printBetweenLines("More work ay? Here's what you need to do: \n"
-                        + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
-                listWordCount++;
-            }catch(DateTimeParseException e){
-                Ui.printBetweenLines("Add time as yyyy-mm-dd");
-            }
-
-        } else if (inputStatement.startsWith("event")) {
-            if (!inputStatement.contains("/at")) {
-                //throws exception when event commands are not followed with /at
-                throw new IllegalCommandsException();
-            }
-            try {
-                listOfItems.add(new Event(getDescriptionFromInput(inputStatement, 5),
-                        getTimeFromInput(inputStatement.substring(indexOfSlash + 3))));
-                Ui.printBetweenLines("More work ay? Here's what you need to do: \n"
-                        + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
-                listWordCount++;
-            }catch(DateTimeParseException e){
-                Ui.printBetweenLines("Add time as yyyy-mm-dd");
-            }
+        }catch(DateTimeParseException e){
+            Ui.printBetweenLines(Ui.MESSAGE_INVALID_TIME);
         }
+        return listWordCount;
+    }
+
+    private static int addDeadline(String inputStatement, ArrayList<Task> listOfItems
+            , int listWordCount, int indexOfSlash, String numberOfTasks) throws IllegalCommandsException {
+        if (!inputStatement.contains("/by")) {
+            //throws exception when deadline commands are not followed with /by
+            throw new IllegalCommandsException();
+        }
+        try {
+            listOfItems.add(new Deadline(getDescriptionFromInput(inputStatement, 8),
+                    getTimeFromInput(inputStatement.substring(indexOfSlash + 3))));
+            Ui.printBetweenLines(Ui.COMMENT_ADD_TASK
+                    + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
+            listWordCount++;
+        }catch(DateTimeParseException e){
+            Ui.printBetweenLines(Ui.MESSAGE_INVALID_TIME);
+        }
+        return listWordCount;
+    }
+
+    private static int addTodo(String inputStatement, ArrayList<Task> listOfItems, int listWordCount, String numberOfTasks) {
+        listOfItems.add(new Todo(inputStatement.substring(4).trim()));
+        Ui.printBetweenLines(Ui.COMMENT_ADD_TASK
+                + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
+        listWordCount++;
         return listWordCount;
     }
 
@@ -70,7 +85,7 @@ public class TaskList {
             //checks if the completed item is already done.
             throw new IllegalCommandsException();
         }
-        System.out.println("One more down, but at what cost...");
+        System.out.println(Ui.COMMENT_MARK_AS_DONE);
         listOfItems.get(indexOfItem - 1).markAsDone();
         System.out.println(listOfItems.get(indexOfItem - 1).getTaskDescription());
     }
@@ -81,7 +96,7 @@ public class TaskList {
             throw new IllegalCommandsException();
         }
         //a function that prints the array without returning any values
-        System.out.println("Here's what you have:");
+        System.out.println(Ui.COMMENT_PRINT_LIST);
         String[] newList = new String[list.size()];
         int listIndex = 0;
         for (Task item : list) {
