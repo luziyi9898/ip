@@ -20,6 +20,8 @@ public class Ui {
     public static final String COMMENT_LOAD_ENTRIES = "Previous entries uploaded.";
     public static final String COMMENT_CREATE_SAVE = "Save not detected, creating new save file.";
     public static final String MESSAGE_UNKNOWN_ERROR ="Something went wrong: ";
+    public static final String MESSAGE_INVALID_FIND = "Unable to find this task.";
+    public static final String COMMENT_PRINT_SEARCH = "Here's the matching tasks:";
 
     public static final String COMMAND_BYE= "bye";
     public static final String COMMAND_LIST = "list";
@@ -28,6 +30,7 @@ public class Ui {
     public static final String COMMAND_TODO = "todo";
     public static final String COMMAND_EVENT = "event";
     public static final String COMMAND_DEADLINE = "deadline";
+    public static final String COMMAND_FIND = "find";
 
     public static final String TODO_ICON = "[T]";
     public static final String EVENT_ICON = "[E]";
@@ -44,6 +47,7 @@ public class Ui {
         System.out.println("\u2022[event ___ /at yyyy/mm/dd] adds a event task to your list with a duration.");
         System.out.println("\u2022[done (index of task)] marks a task as done in your list.");
         System.out.println("\u2022[list] prints out your current list and status of tasks.");
+        System.out.println("\u2022[find ___] lets you find a task based on its name.");
         System.out.println("\u2022[bye] exits the programme.");
         System.out.println(DIVIDER);
         System.out.println("Greetings, care for a cup of coffee?");
@@ -58,6 +62,7 @@ public class Ui {
     public static void printEndingText() {
         printBetweenLines("We shall meet again...");
     }
+
     public static void printNumberOfTasks(Integer listWordCount) {
         System.out.println("Now you have " + listWordCount + " tasks in the list.");
     }

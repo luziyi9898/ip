@@ -25,6 +25,57 @@ public class TaskList {
         return listWordCount;
     }
 
+    public static void markAsDone(String inputStatement, ArrayList<Task> listOfItems) throws IllegalCommandsException {
+        int indexOfItem = Integer.parseInt(inputStatement.substring(4).trim());
+        if (listOfItems.get(indexOfItem - 1).getStatus()) {
+            //checks if the completed item is already done.
+            throw new IllegalCommandsException();
+        }
+        System.out.println(Ui.COMMENT_MARK_AS_DONE);
+        listOfItems.get(indexOfItem - 1).markAsDone();
+        System.out.println(listOfItems.get(indexOfItem - 1).getTaskDescription());
+    }
+
+    public static void printArrangedList(ArrayList<Task> list) throws IllegalCommandsException {
+        //throws an error exception if list is empty
+        if (list.size() == 0) {
+            throw new IllegalCommandsException();
+        }
+        //a function that prints the array without returning any values
+        System.out.println(Ui.COMMENT_PRINT_LIST);
+        String[] newList = new String[list.size()];
+        int listIndex = 0;
+        for (Task item : list) {
+            if (item != null) {
+                newList[listIndex] = (listIndex + 1) + ". " + item.getTaskDescription();
+                listIndex++;
+            }
+        }
+        for (String item : Arrays.copyOf(newList, listIndex)) {
+            System.out.println(item);
+        }
+    }
+
+    public static void findTask(ArrayList<Task> list, String inputStatement) throws IllegalCommandsException {
+        String keyWord = inputStatement.substring(4).trim();
+        String[] newList = new String[list.size()];
+        int listIndex = 0;
+        for (Task item : list) {
+            if (item.getTaskName().contains(keyWord) ) {
+                newList[listIndex] = (listIndex + 1) + ". " + item.getTaskDescription();
+                listIndex++;
+            }
+        }
+        if (listIndex>0) {
+            System.out.println(Ui.COMMENT_PRINT_SEARCH);
+            for (String item : Arrays.copyOf(newList, listIndex)) {
+                System.out.println(item);
+            }
+        }else
+            throw new IllegalCommandsException();
+
+    }
+
     private static int addEvent(String inputStatement, ArrayList<Task> listOfItems, int listWordCount
             , int indexOfSlash, String numberOfTasks) throws IllegalCommandsException {
         if (!inputStatement.contains("/at")) {
@@ -69,44 +120,14 @@ public class TaskList {
         return listWordCount;
     }
 
-    static LocalDate getTimeFromInput(String inputStatement) {
-
+    private static LocalDate getTimeFromInput(String inputStatement) {
         return LocalDate.parse(inputStatement.trim().replace('/','-'));
     }
 
-    static String getDescriptionFromInput(String inputStatement, int i) {
+    private static String getDescriptionFromInput(String inputStatement, int i) {
         //i represents the number of letters in the command
         return inputStatement.substring(i, inputStatement.indexOf("/")).trim();
     }
 
-    public static void markAsDone(String inputStatement, ArrayList<Task> listOfItems) throws IllegalCommandsException {
-        int indexOfItem = Integer.parseInt(inputStatement.substring(4).trim());
-        if (listOfItems.get(indexOfItem - 1).getStatus()) {
-            //checks if the completed item is already done.
-            throw new IllegalCommandsException();
-        }
-        System.out.println(Ui.COMMENT_MARK_AS_DONE);
-        listOfItems.get(indexOfItem - 1).markAsDone();
-        System.out.println(listOfItems.get(indexOfItem - 1).getTaskDescription());
-    }
 
-    public static void printArrangedList(ArrayList<Task> list) throws IllegalCommandsException {
-        //throws an error exception if list is empty
-        if (list.size() == 0) {
-            throw new IllegalCommandsException();
-        }
-        //a function that prints the array without returning any values
-        System.out.println(Ui.COMMENT_PRINT_LIST);
-        String[] newList = new String[list.size()];
-        int listIndex = 0;
-        for (Task item : list) {
-            if (item != null) {
-                newList[listIndex] = (listIndex + 1) + ". " + item.getTaskDescription();
-                listIndex++;
-            }
-        }
-        for (String item : Arrays.copyOf(newList, listIndex)) {
-            System.out.println(item);
-        }
-    }
 }
