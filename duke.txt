@@ -1,5 +1,4 @@
 [D][✓] acb (by:Feb 3 2020)
 [E][✘] thisisanevent (at:Nov 5 2020)
 [E][✓] do2113 (at:Sep 23 2020)
-[T][✘] xxx
 [E][✓] ecp (at:Oct 11 2020)

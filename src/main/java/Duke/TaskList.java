@@ -5,10 +5,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.time.LocalDate;
 
+/**
+ * Contains task list  and operations to add and remove tasks.
+ */
+
 public class TaskList {
 
     public static ArrayList<Task> listOfItems = new ArrayList<>();
 
+    /**
+     * Adds a new task to the arraylist of tasks.
+     * @param inputStatement user input that describes the task.
+     * @param listOfItems Arraylist of all the tasks currently present.
+     * @param listWordCount Counter for current number of tasks in arraylist.
+     * @return updated number of tasks in the list.
+     * @throws IllegalCommandsException
+     */
     public static int addTask(String inputStatement
             , ArrayList<Task> listOfItems, int listWordCount) throws IllegalCommandsException {
         //determines what type of task is inputted, before add it to listOfItems and then incrementing listWordCount
@@ -23,6 +35,60 @@ public class TaskList {
             listWordCount = addEvent(inputStatement, listOfItems, listWordCount, indexOfSlash, numberOfTasks);
         }
         return listWordCount;
+    }
+
+    /**
+     * Mark a specified task as done based on their index.
+     * @param inputStatement user input that determines which task is to be done based on index.
+     * @param listOfItems Arraylist of all the tasks currently present.
+     * @throws IllegalCommandsException when trying to do a task that's already done.
+     */
+    public static void markAsDone(String inputStatement, ArrayList<Task> listOfItems) throws IllegalCommandsException {
+        int indexOfItem = Integer.parseInt(inputStatement.substring(4).trim());
+        if (listOfItems.get(indexOfItem - 1).getStatus()) {
+            //checks if the completed item is already done.
+            throw new IllegalCommandsException();
+        }
+        System.out.println(Ui.COMMENT_MARK_AS_DONE);
+        listOfItems.get(indexOfItem - 1).markAsDone();
+        System.out.println(listOfItems.get(indexOfItem - 1).getTaskDescription());
+    }
+
+    /**
+     * Print out current list of inputs with their indexes.
+     * @param list Arraylist of all the tasks currently present.
+     * @throws IllegalCommandsException when list is empty.
+     */
+    public static void printArrangedList(ArrayList<Task> list) throws IllegalCommandsException {
+        //throws an error exception if list is empty
+        if (list.size() == 0) {
+            throw new IllegalCommandsException();
+        }
+        //a function that prints the array without returning any values
+        System.out.println(Ui.COMMENT_PRINT_LIST);
+        String[] newList = new String[list.size()];
+        int listIndex = 0;
+        for (Task item : list) {
+            if (item != null) {
+                newList[listIndex] = (listIndex + 1) + ". " + item.getTaskDescription();
+                listIndex++;
+            }
+        }
+        for (String item : Arrays.copyOf(newList, listIndex)) {
+            System.out.println(item);
+        }
+    }
+
+    /**
+     * Delete a task from the arraylist of tasks.
+     * @param inputStatement user input that determines which task is to be deleted based on index.
+     * @param list Arraylist of all the tasks currently present.
+     */
+    public static void deleteItem(String inputStatement, ArrayList<Task> list) {
+        int indexOfRemovedItem = Integer.parseInt(inputStatement.substring(6).trim());
+        System.out.println(Ui.COMMENT_DELETE_ITEM
+                + list.get(indexOfRemovedItem - 1).getTaskDescription());
+        list.remove(indexOfRemovedItem - 1);
     }
 
     private static int addEvent(String inputStatement, ArrayList<Task> listOfItems, int listWordCount
@@ -69,44 +135,15 @@ public class TaskList {
         return listWordCount;
     }
 
-    static LocalDate getTimeFromInput(String inputStatement) {
+    private static LocalDate getTimeFromInput(String inputStatement) {
 
         return LocalDate.parse(inputStatement.trim().replace('/','-'));
     }
 
-    static String getDescriptionFromInput(String inputStatement, int i) {
+    private static String getDescriptionFromInput(String inputStatement, int i) {
         //i represents the number of letters in the command
         return inputStatement.substring(i, inputStatement.indexOf("/")).trim();
     }
 
-    public static void markAsDone(String inputStatement, ArrayList<Task> listOfItems) throws IllegalCommandsException {
-        int indexOfItem = Integer.parseInt(inputStatement.substring(4).trim());
-        if (listOfItems.get(indexOfItem - 1).getStatus()) {
-            //checks if the completed item is already done.
-            throw new IllegalCommandsException();
-        }
-        System.out.println(Ui.COMMENT_MARK_AS_DONE);
-        listOfItems.get(indexOfItem - 1).markAsDone();
-        System.out.println(listOfItems.get(indexOfItem - 1).getTaskDescription());
-    }
 
-    public static void printArrangedList(ArrayList<Task> list) throws IllegalCommandsException {
-        //throws an error exception if list is empty
-        if (list.size() == 0) {
-            throw new IllegalCommandsException();
-        }
-        //a function that prints the array without returning any values
-        System.out.println(Ui.COMMENT_PRINT_LIST);
-        String[] newList = new String[list.size()];
-        int listIndex = 0;
-        for (Task item : list) {
-            if (item != null) {
-                newList[listIndex] = (listIndex + 1) + ". " + item.getTaskDescription();
-                listIndex++;
-            }
-        }
-        for (String item : Arrays.copyOf(newList, listIndex)) {
-            System.out.println(item);
-        }
-    }
 }

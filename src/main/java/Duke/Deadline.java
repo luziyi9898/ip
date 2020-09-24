@@ -3,6 +3,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+/**
+ * Represents a deadline task, a task with a specified deadline.
+ */
 public class Deadline extends Todo{
     protected LocalDate dateBy;
 
@@ -12,6 +15,10 @@ public class Deadline extends Todo{
         this.letterRepresentingTask = Ui.DEADLINE_ICON;
     }
 
+    /**
+     * Generate the deadline for a deadline class.
+     * @return a string representing the deadline of the task.
+     */
     public String getDateBy() {
         return dateBy.format(DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH));
     }

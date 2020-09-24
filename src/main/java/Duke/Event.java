@@ -2,7 +2,9 @@ package Duke;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-
+/**
+ * Represents a deadline task, a task with a specified date.
+ */
 public class Event extends Todo{
     protected LocalDate dateAt;
 
@@ -11,7 +13,10 @@ public class Event extends Todo{
         this.dateAt = dateAt;
         this.letterRepresentingTask = Ui.EVENT_ICON;
     }
-
+    /**
+     * Generate the deadline for a event class.
+     * @return a string representing the date of the task.
+     */
     public String getDateAt() {
         return dateAt.format(DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH));
     }
