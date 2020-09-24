@@ -25,7 +25,9 @@ public class Parser {
             } else if (inputStatement.startsWith(Ui.COMMAND_TODO) | inputStatement.startsWith(Ui.COMMAND_EVENT)
                     | inputStatement.startsWith(Ui.COMMAND_DEADLINE)) {
                 executesAddTask(listOfItems, inputStatement, listWordCount);
-            } else {
+            } else if(inputStatement.startsWith(Ui.COMMAND_FIND)) {
+                executesFindTask(listOfItems, inputStatement);
+            }else {
                 //throws exception when inputting invalid commands.
                 Ui.printBetweenLines(Ui.MESSAGE_INVALID_COMMAND);
             }
@@ -34,6 +36,16 @@ public class Parser {
 
 
         }
+    }
+    private static void executesFindTask(ArrayList<Task> listOfItems, String inputStatement) {
+        System.out.println(Ui.DIVIDER);
+        try {
+            TaskList.findTask(listOfItems,inputStatement);
+        } catch (IllegalCommandsException e) {
+            //throws exception when cannot find the task.
+            System.out.println(Ui.MESSAGE_INVALID_FIND);
+        }
+        System.out.println(Ui.DIVIDER);
     }
 
     private static void executesAddTask(ArrayList<Task> listOfItems, String inputStatement, int listWordCount) {
