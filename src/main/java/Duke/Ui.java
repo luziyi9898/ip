@@ -1,5 +1,8 @@
 package Duke;
 
+/**
+ * Text UI of the application and user visible messages.
+ */
 public class Ui {
 
     public static final String DIVIDER= "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
@@ -36,7 +39,9 @@ public class Ui {
     public static final String EVENT_ICON = "[E]";
     public static final String DEADLINE_ICON = "[D]";
 
-
+    /**
+     * Print welcome text at the start of the program.
+     */
     public static void printWelcomeText() {
         System.out.println(DIVIDER);
         System.out.println("Hey, welcome to my version of Duke and please make good use of it.");
@@ -54,17 +59,30 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
+    /**
+     * Print a string between two divider lines.
+     * @param s line that is to be printed between two divider lines.
+     */
     public static void printBetweenLines(String s) {
         System.out.println(DIVIDER);
         System.out.println(s);
         System.out.println(DIVIDER);
     }
+
+    /**
+     * Print ending text.
+     */
     public static void printEndingText() {
         printBetweenLines("We shall meet again...");
     }
 
-    public static void printNumberOfTasks(Integer listWordCount) {
-        System.out.println("Now you have " + listWordCount + " tasks in the list.");
+
+    /**
+     * Print the number of tasks left in the list.
+     * @param listTaskCount
+     */
+    public static void printNumberOfTasks(Integer listTaskCount) {
+        System.out.println("Now you have " + listTaskCount + " tasks in the list.");
     }
 
 }

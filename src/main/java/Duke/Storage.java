@@ -12,11 +12,21 @@ import java.util.Locale;
 import java.util.Scanner;
 
 
-
+/**
+ * Represent files that are used to store the list of tasks.
+ */
 public class Storage {
-
+    /**
+     * Default file path that is used.
+     */
     public static String defaultPath = "duke.txt";
 
+    /**
+     * Saves the current arraylist of tasks to local storage file.
+     * @param filePath path of the local storage file.
+     * @param list current arraylist of tasks
+     * @throws IOException when errors occur while processing local storage file.
+     */
     public static void writeToFile(String filePath, ArrayList<Task> list) throws IOException {
 
         FileWriter fw = new FileWriter(filePath);
@@ -28,13 +38,12 @@ public class Storage {
         fw.close();
     }
 
-    public static void deleteItem(String inputStatement, ArrayList<Task> list) {
-        int indexOfRemovedItem = Integer.parseInt(inputStatement.substring(6).trim());
-        System.out.println(Ui.COMMENT_DELETE_ITEM
-                + list.get(indexOfRemovedItem - 1).getTaskDescription());
-        list.remove(indexOfRemovedItem - 1);
-    }
-
+    /**
+     * Loads the arraylist of tasks from the local storage file if present.
+     * @param filePath path of the local storage file.
+     * @param list current arraylist of tasks.
+     * @throws FileNotFoundException if no local storage file is present.
+     */
     public static void loadSavedText(String filePath, ArrayList<Task> list) throws FileNotFoundException {
         File f = new File(filePath); // create a File for the given file path
         Scanner s = new Scanner(f); // create a Scanner using the File as the source
@@ -72,6 +81,10 @@ public class Storage {
         }
     }
 
+    /**
+     * Look for local storage file and creates a new one under the default path is one isn't present.
+     * @throws IOException if no local storage file is found.
+     */
     public static void loadPreviousEntries() throws IOException {
         try {
             Storage.loadSavedText(Storage.defaultPath, TaskList.listOfItems);
@@ -84,6 +97,12 @@ public class Storage {
             System.out.println(Ui.DIVIDER);
         }
     }
+
+    /**
+     * Updates the local storage file based on current arraylist of tasks.
+     * @param defaultPath path of the local storage file.
+     * @param listOfItems current arraylist of tasks.
+     */
     public static void updateSavedFile(String defaultPath, ArrayList<Task> listOfItems) {
         try {
             Storage.writeToFile(defaultPath, listOfItems);

@@ -3,9 +3,19 @@ package Duke;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Parses user input.
+ */
 public class Parser {
 
     public static boolean hasEnded = false;
+
+    /**
+     * Reads user inputs and react accordingly.
+     * @param hasEnded flag signifying end of program.
+     * @param defaultPath path of the local storage file.
+     * @param listOfItems Arraylist of all the tasks currently present.
+     */
 
     public static void runCommandLoop(boolean hasEnded, String defaultPath, ArrayList<Task> listOfItems) {
         String inputStatement;
@@ -61,7 +71,7 @@ public class Parser {
     private static void executesDelete(ArrayList<Task> listOfItems, String inputStatement, int listWordCount) {
         System.out.println(Ui.DIVIDER);
         try {
-            Storage.deleteItem(inputStatement, listOfItems);
+            TaskList.deleteItem(inputStatement, listOfItems);
             listWordCount = listWordCount - 1;
             Ui.printNumberOfTasks(listWordCount);
         } catch (IndexOutOfBoundsException | NumberFormatException e) {
