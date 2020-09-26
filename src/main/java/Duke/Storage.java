@@ -56,22 +56,26 @@ public class Storage {
             if (importedCommand.startsWith(Ui.TODO_ICON)) {
                 list.add(new Todo(importedCommand.substring(7).trim()));
             } else if (importedCommand.startsWith(Ui.DEADLINE_ICON)) {
+                String taskDateByInString = importedCommand.substring(importedCommand.indexOf("by:") + 3
+                        , importedCommand.length() - 1);
                 try {
-                    LocalDate taskDateBy = LocalDate.parse(importedCommand.substring(importedCommand.indexOf("by:") + 3
-                            , importedCommand.length() - 1)
+                    LocalDate taskDateBy = LocalDate.parse(taskDateByInString
                             , DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH));
                     list.add(new Deadline(importedCommand.substring(7, importedCommand.indexOf("(") - 1), taskDateBy));
                 }catch(DateTimeParseException e){
-                    Ui.printBetweenLines(Ui.MESSAGE_INVALID_TIME);
+                    list.add(new Deadline(importedCommand.substring(7, importedCommand.indexOf("(") - 1)
+                            , taskDateByInString));
                 }
             } else if (importedCommand.startsWith(Ui.EVENT_ICON)) {
+                String taskDateAtInString = importedCommand.substring(importedCommand.indexOf("at:") + 3
+                        , importedCommand.length() - 1);
                 try {
-                    LocalDate taskDateAt = LocalDate.parse(importedCommand.substring(importedCommand.indexOf("at:") + 3
-                            , importedCommand.length() - 1)
+                    LocalDate taskDateAt = LocalDate.parse(taskDateAtInString
                             , DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH));
                     list.add(new Event(importedCommand.substring(7, importedCommand.indexOf("(") - 1), taskDateAt));
                 }catch(DateTimeParseException e){
-                    Ui.printBetweenLines(Ui.MESSAGE_INVALID_TIME);
+                    list.add(new Event(importedCommand.substring(7, importedCommand.indexOf("(") - 1)
+                            , taskDateAtInString));
                 }
             }
             if (currentStatusSymbol.equals(10003)) {

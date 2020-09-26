@@ -1,90 +1,26 @@
-# User Guide for Duke v0.2 by Lu Ziyi
+# Duke project template
 
-This is a quick personal task manager that operates based on text inputs.
+This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
 
-##Changes from release v0.1
-What's different from release 0.1:
-* Implemented find function which allows user to locate a task using its description
-* Implemented recognition for date and time.
-  * The current version only supports date inputs as the time for events and deadlines in the form of yyyy/mm/dd
+## Setting up in Intellij
 
-## Starting the program
+Prerequisites: JDK 11, update Intellij to the most recent version.
 
-**Using command line**
-1. Open command prompt
-1. cd into the file directory where the ip.jar file is.
-1. Type `java -jar ip.jar`, then Enter to execute
-1. Interact with Duke using CLI
-
-##Listing all tasks `list`
-Display the whole list of tasks, as well as their details and indexes.
-
-Format: `list`
-
-##Adding a todo task `todo`
-Adds a todo task to the list.
-
-Format: `todo NAME`
-
-Examples: 
-
-* `todo read The King in Yellow`
-##Adding a deadline task `deadline`
-Adds a deadline task to the list with a date that it should be completed by.
-
-Format: `deadline NAME /by TIME`
-
-Examples:
-
-* `deadline complete proposal /by 2020/11/12`
-##Adding an event task `event`
-Adds an event task to the list with a date that it happens on.
-
-Format: `event NAME /at TIME`
-
-Examples:
-
-* `event cs2101 presentation /at 2020/09/14`
-##Completing a task `done`
-Mark a task as done.
-
-Format: `done INDEX` 
-
-Completes the task at the specified `INDEX`. The index is with reference to the index number displaced in the most recent listing.
-
-Examples:
-
-* `done 3`
-
-  Marks the third task as done.
-##Deleting a task `delete`
-Deletes a task from the list.
-
-Format: `delete INDEX`
-
-Deletes the task at the specified `INDEX`. The index is with reference to the index number displaced in the most recent listing.
-
-Examples:
-
-* `delete 3` 
-
-  Deletes the third task from the list.
-##Finding a task `find`
-Finds a task from the list.
-
-Format: `find NAME`
-
-The search is case-sensitive, and tasks with names that has matching keyword will be returned.
-
-Examples:
-
-* `find King`
-  returns the todo task with the description: read The King in Yellow.
-##Terminating the program `bye`
-Terminates the program.
-Format: `bye`
-
-##Saving the data
-Duke automatically saves data into a local storage called `Duke.txt` located in the safe folder as `ip.jar`. 
-There is no need to save manually.
-If Duke cannot find a save file, it will automatically create a new one.
+1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project dialog first)
+1. Set up the correct JDK version, as follows:
+   1. Click `Configure` > `Structure for New Projects` and then `Project Settings` > `Project` > `Project SDK`
+   1. If JDK 11 is listed in the drop down, select it. If it is not, click `New...` and select the directory where you installed JDK 11
+   1. Click `OK`
+1. Import the project into Intellij as follows:
+   1. Click `Open or Import`.
+   1. Select the project directory, and click `OK`
+   1. If there are any further prompts, accept the defaults.
+1. After the importing is complete, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()`. If the setup is correct, you should see something like the below:
+   ```
+   Hello from
+    ____        _        
+   |  _ \ _   _| | _____ 
+   | | | | | | | |/ / _ \
+   | |_| | |_| |   <  __/
+   |____/ \__,_|_|\_\___|
+   ```

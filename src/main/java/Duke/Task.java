@@ -1,7 +1,5 @@
 package Duke;
 
-import java.time.LocalDate;
-
 /**
  * Represents a task in Duke.
  */
@@ -49,13 +47,5 @@ public class Task {
      */
     public void markAsDone(){
         this.isDone = true;
-    }
-
-    /**
-     * Sets the date of a task.
-     * @param Date date of a task.
-     */
-    public void setDate(LocalDate Date){
-
     }
 }

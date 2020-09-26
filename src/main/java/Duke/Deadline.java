@@ -8,6 +8,7 @@ import java.util.Locale;
  */
 public class Deadline extends Todo{
     protected LocalDate dateBy;
+    protected String dateInString;
 
     public Deadline(String description, LocalDate dateBy) {
         super(description);
@@ -15,18 +16,24 @@ public class Deadline extends Todo{
         this.letterRepresentingTask = Ui.DEADLINE_ICON;
     }
 
+    public Deadline(String description, String dateInString) {
+        super(description);
+        this.dateInString = dateInString;
+        this.letterRepresentingTask = Ui.DEADLINE_ICON;
+    }
+
+
     /**
      * Generate the deadline for a deadline class.
      * @return a string representing the deadline of the task.
      */
     public String getDateBy() {
-        return dateBy.format(DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH));
+        if (dateBy != null) {
+            return dateBy.format(DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH));
+        } else{
+            return dateInString;
+        }
     }
-    @Override
-    public void setDate(LocalDate dateBy) {
-        this.dateBy = dateBy;
-    }
-
     @Override
     public String getTaskDescription() {
         return this.letterRepresentingTask + "[" + this.getStatusIcon() +"] " + this.description +" (by:"+ this.getDateBy()+")";

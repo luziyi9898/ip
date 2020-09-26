@@ -15,7 +15,6 @@ public class Ui {
     public static final String MESSAGE_INVALID_TASK = "That's not a valid task!";
     public static final String MESSAGE_INVALID_COMMAND = "That's not a valid command!";
     public static final String COMMENT_ADD_TASK = "More work ay? Here's what you need to do: \n";
-    public static final String MESSAGE_INVALID_TIME = "Add time as yyyy/mm/dd";
     public static final String COMMENT_MARK_AS_DONE = "One more down, but at what cost...";
     public static final String COMMENT_PRINT_LIST = "Here's what you have:";
     public static final String COMMENT_DELETE_ITEM = "Must be nice to have less things to do, right? " +
@@ -48,8 +47,8 @@ public class Ui {
         System.out.println("The bot is meant to be a bit cheeky at times so don't mind it.");
         System.out.println("Here is a list of commands you can try out:");
         System.out.println("\u2022[todo ___] adds a todo task to your list.");
-        System.out.println("\u2022[deadline ___ /by yyyy/mm/dd] adds a deadline task to your list with a deadline.");
-        System.out.println("\u2022[event ___ /at yyyy/mm/dd] adds a event task to your list with a duration.");
+        System.out.println("\u2022[deadline ___ /by ____] adds a deadline task to your list with a deadline.");
+        System.out.println("\u2022[event ___ /at ____] adds a event task to your list with a duration.");
         System.out.println("\u2022[done (index of task)] marks a task as done in your list.");
         System.out.println("\u2022[list] prints out your current list and status of tasks.");
         System.out.println("\u2022[find ___] lets you find a task based on its name.");
@@ -79,7 +78,7 @@ public class Ui {
 
     /**
      * Print the number of tasks left in the list.
-     * @param listTaskCount
+     * @param listTaskCount number of tasks in the list.
      */
     public static void printNumberOfTasks(Integer listTaskCount) {
         System.out.println("Now you have " + listTaskCount + " tasks in the list.");

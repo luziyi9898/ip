@@ -127,7 +127,11 @@ public class TaskList {
                     + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
             listWordCount++;
         }catch(DateTimeParseException e){
-            Ui.printBetweenLines(Ui.MESSAGE_INVALID_TIME);
+            listOfItems.add(new Event(getDescriptionFromInput(inputStatement, 5),
+                    (inputStatement.substring(indexOfSlash + 3)).trim()));
+            Ui.printBetweenLines(Ui.COMMENT_ADD_TASK
+                    + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
+            listWordCount++;
         }
         return listWordCount;
     }
@@ -145,7 +149,11 @@ public class TaskList {
                     + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
             listWordCount++;
         }catch(DateTimeParseException e){
-            Ui.printBetweenLines(Ui.MESSAGE_INVALID_TIME);
+            listOfItems.add(new Deadline(getDescriptionFromInput(inputStatement, 8),
+                   (inputStatement.substring(indexOfSlash + 3)).trim()));
+            Ui.printBetweenLines(Ui.COMMENT_ADD_TASK
+                    + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
+            listWordCount++;
         }
         return listWordCount;
     }
