@@ -36,7 +36,8 @@ public class Deadline extends Todo{
     }
     @Override
     public String getTaskDescription() {
-        return this.letterRepresentingTask + "[" + this.getStatusIcon() +"] " + this.description +" (by:"+ this.getDateBy()+")";
+        return this.letterRepresentingTask + "[" + this.getStatusIcon() +"] "
+                + this.description +" (by:"+ this.getDateBy()+")";
     }
 }
 

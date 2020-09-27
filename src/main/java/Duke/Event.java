@@ -34,6 +34,7 @@ public class Event extends Todo{
     }
     @Override
     public String getTaskDescription() {
-        return this.letterRepresentingTask + "[" + this.getStatusIcon() +"] " + this.description +" (at:" +this.getDateAt() + ")";
+        return this.letterRepresentingTask + "[" + this.getStatusIcon() +"] "
+                + this.description +" (at:" +this.getDateAt() + ")";
     }
 }
