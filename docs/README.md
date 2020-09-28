@@ -4,17 +4,17 @@ This is a quick personal task manager that operates based on text inputs.
 
 **Changes from release v0.1**
 What's different from release 0.1:
-* Implemented find function which allows user to locate a task using its description
+* Implemented find function which allows user to locate a task using its description.
 * Implemented recognition for date and time.
   * If input for time is in the format `yyyy/mm/dd`, Duke automatically converts it into date format.
 
 ## Starting the program
 
 **Using command line**
-1. Open command prompt
+1. Open command prompt.
 1. cd into the file directory where the ip.jar file is.
-1. Type `java -jar ip.jar`, then Enter to execute
-1. Interact with Duke using CLI
+1. Type `java -jar ip.jar`, then Enter to execute.
+1. Interact with Duke using CLI.
 
 ## Features
 
@@ -88,13 +88,15 @@ The search is case-sensitive, and tasks with names that has matching keyword wil
 Examples:
 
 * `find King`
+
   returns the todo task with the description: read The King in Yellow.
 
 ## Terminating the program `bye`
 Terminates the program.
+
 Format: `bye`
 
 ## Saving the data
-Duke automatically saves data into a local storage called `Duke.txt` located in the safe folder as `ip.jar`. 
+Duke automatically saves data into a local storage called `Duke.txt` located in the same folder as `ip.jar`. 
 There is no need to save manually.
 If Duke cannot find a save file, it will automatically create a new one.

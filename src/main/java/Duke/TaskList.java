@@ -66,7 +66,6 @@ public class TaskList {
         if (list.size() == 0) {
             throw new IllegalCommandsException();
         }
-        //a function that prints the array without returning any values
         System.out.println(Ui.COMMENT_PRINT_LIST);
         String[] newList = new String[list.size()];
         int listIndex = 0;
@@ -158,7 +157,8 @@ public class TaskList {
         return listWordCount;
     }
 
-    private static int addTodo(String inputStatement, ArrayList<Task> listOfItems, int listWordCount, String numberOfTasks) {
+    private static int addTodo(String inputStatement, ArrayList<Task> listOfItems
+            , int listWordCount, String numberOfTasks) {
         listOfItems.add(new Todo(inputStatement.substring(4).trim()));
         Ui.printBetweenLines(Ui.COMMENT_ADD_TASK
                 + listOfItems.get(listWordCount).getTaskDescription() + numberOfTasks);
